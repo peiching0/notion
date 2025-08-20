@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countdown Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f8fafc;
+      margin: 0;
+    }
+    .countdown {
+      text-align: center;
+      padding: 20px;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    input {
+      margin: 10px;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+    #timer {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown">
+    <h2>Set Your Deadline</h2>
+    <input type="datetime-local" id="deadline" />
+    <div id="timer">00d 00h 00m 00s</div>
+  </div>
+
+  <script>
+    const deadlineInput = document.getElementById("deadline");
+    const timer = document.getElementById("timer");
+    let countdown;
+
+    deadlineInput.addEventListener("change", () => {
+      clearInterval(countdown);
+      const endTime = new Date(deadlineInput.value).getTime();
+      
+      countdown = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = endTime - now;
+
+        if (distance <= 0) {
+          clearInterval(countdown);
+          timer.textContent = "🎉 Deadline reached!";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        timer.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
